@@ -1,0 +1,395 @@
+
+softblink.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  00800100  000001ee  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         0000019a  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  000001ee  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000220  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000028  00000000  00000000  0000025c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000078e  00000000  00000000  00000284  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000006e5  00000000  00000000  00000a12  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000341  00000000  00000000  000010f7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000034  00000000  00000000  00001438  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000444  00000000  00000000  0000146c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000152  00000000  00000000  000018b0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000018  00000000  00000000  00001a02  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 34 00 	jmp	0x68	; 0x68 <__ctors_end>
+   4:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+   8:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+   c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  10:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  14:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  18:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  1c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  20:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  24:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  28:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  2c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  30:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  34:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  38:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  3c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  40:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  44:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  48:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  4c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  50:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  54:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  58:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  5c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  60:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+  64:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
+
+00000068 <__ctors_end>:
+  68:	11 24       	eor	r1, r1
+  6a:	1f be       	out	0x3f, r1	; 63
+  6c:	cf ef       	ldi	r28, 0xFF	; 255
+  6e:	d4 e0       	ldi	r29, 0x04	; 4
+  70:	de bf       	out	0x3e, r29	; 62
+  72:	cd bf       	out	0x3d, r28	; 61
+  74:	0e 94 4c 00 	call	0x98	; 0x98 <main>
+  78:	0c 94 cb 00 	jmp	0x196	; 0x196 <_exit>
+
+0000007c <__bad_interrupt>:
+  7c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000080 <_Z5delayi>:
+#include <avr/io.h>
+#include <util/delay.h>
+
+void delay(int n)
+{
+	while(n--)
+  80:	9c 01       	movw	r18, r24
+  82:	21 50       	subi	r18, 0x01	; 1
+  84:	31 09       	sbc	r19, r1
+  86:	89 2b       	or	r24, r25
+  88:	31 f0       	breq	.+12     	; 0x96 <_Z5delayi+0x16>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  8a:	83 e0       	ldi	r24, 0x03	; 3
+  8c:	8a 95       	dec	r24
+  8e:	f1 f7       	brne	.-4      	; 0x8c <_Z5delayi+0xc>
+  90:	00 00       	nop
+  92:	c9 01       	movw	r24, r18
+  94:	f5 cf       	rjmp	.-22     	; 0x80 <_Z5delayi>
+  96:	08 95       	ret
+
+00000098 <main>:
+
+
+
+int main(void)
+{
+	DDRB = (1 << PB1); //Set pin PB1 as output
+  98:	82 e0       	ldi	r24, 0x02	; 2
+  9a:	84 b9       	out	0x04, r24	; 4
+	
+	int cycleTime = 1000; //Define PWM period in us
+	int dutyCycleTime = 0; //Set dutyCycle start value
+	int i = 0;
+  9c:	c0 e0       	ldi	r28, 0x00	; 0
+  9e:	d0 e0       	ldi	r29, 0x00	; 0
+int main(void)
+{
+	DDRB = (1 << PB1); //Set pin PB1 as output
+	
+	int cycleTime = 1000; //Define PWM period in us
+	int dutyCycleTime = 0; //Set dutyCycle start value
+  a0:	00 e0       	ldi	r16, 0x00	; 0
+  a2:	10 e0       	ldi	r17, 0x00	; 0
+  a4:	04 c0       	rjmp	.+8      	; 0xae <main+0x16>
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+  a6:	c0 e0       	ldi	r28, 0x00	; 0
+  a8:	d0 e0       	ldi	r29, 0x00	; 0
+			{
+				dutyCycleTime+=9;
+			}
+			else
+			{
+				dutyCycleTime = 0;
+  aa:	00 e0       	ldi	r16, 0x00	; 0
+  ac:	10 e0       	ldi	r17, 0x00	; 0
+	int dutyCycleTime = 0; //Set dutyCycle start value
+	int i = 0;
+	
+	while (1)
+	{
+		PORTB |= (1 << PB1); //Set PB1 HIGH
+  ae:	85 b1       	in	r24, 0x05	; 5
+  b0:	82 60       	ori	r24, 0x02	; 2
+  b2:	85 b9       	out	0x05, r24	; 5
+		delay(dutyCycleTime); //Wait
+  b4:	c8 01       	movw	r24, r16
+  b6:	0e 94 40 00 	call	0x80	; 0x80 <_Z5delayi>
+		PORTB &= ~(1 << PB1); //Set PB1 LOW
+  ba:	85 b1       	in	r24, 0x05	; 5
+  bc:	8d 7f       	andi	r24, 0xFD	; 253
+  be:	85 b9       	out	0x05, r24	; 5
+		delay(cycleTime - dutyCycleTime); //Wait remaining time
+  c0:	88 ee       	ldi	r24, 0xE8	; 232
+  c2:	93 e0       	ldi	r25, 0x03	; 3
+  c4:	80 1b       	sub	r24, r16
+  c6:	91 0b       	sbc	r25, r17
+  c8:	0e 94 40 00 	call	0x80	; 0x80 <_Z5delayi>
+		
+		i++;
+  cc:	21 96       	adiw	r28, 0x01	; 1
+		
+		if (i == 5)
+  ce:	c5 30       	cpi	r28, 0x05	; 5
+  d0:	d1 05       	cpc	r29, r1
+  d2:	69 f7       	brne	.-38     	; 0xae <main+0x16>
+		{
+			
+			if (dutyCycleTime < 100)
+  d4:	04 36       	cpi	r16, 0x64	; 100
+  d6:	11 05       	cpc	r17, r1
+  d8:	2c f4       	brge	.+10     	; 0xe4 <main+0x4c>
+			{
+				dutyCycleTime++;
+  da:	0f 5f       	subi	r16, 0xFF	; 255
+  dc:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+  de:	c0 e0       	ldi	r28, 0x00	; 0
+  e0:	d0 e0       	ldi	r29, 0x00	; 0
+  e2:	e5 cf       	rjmp	.-54     	; 0xae <main+0x16>
+			
+			if (dutyCycleTime < 100)
+			{
+				dutyCycleTime++;
+			}
+			else if(dutyCycleTime >= 100 && dutyCycleTime < 200)
+  e4:	98 01       	movw	r18, r16
+  e6:	c8 01       	movw	r24, r16
+  e8:	84 56       	subi	r24, 0x64	; 100
+  ea:	91 09       	sbc	r25, r1
+  ec:	84 36       	cpi	r24, 0x64	; 100
+  ee:	91 05       	cpc	r25, r1
+  f0:	28 f4       	brcc	.+10     	; 0xfc <main+0x64>
+			{
+				dutyCycleTime+=2;
+  f2:	0e 5f       	subi	r16, 0xFE	; 254
+  f4:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+  f6:	c0 e0       	ldi	r28, 0x00	; 0
+  f8:	d0 e0       	ldi	r29, 0x00	; 0
+  fa:	d9 cf       	rjmp	.-78     	; 0xae <main+0x16>
+			}
+			else if(dutyCycleTime >= 100 && dutyCycleTime < 200)
+			{
+				dutyCycleTime+=2;
+			}
+			else if(dutyCycleTime >= 200 && dutyCycleTime < 300)
+  fc:	c8 01       	movw	r24, r16
+  fe:	88 5c       	subi	r24, 0xC8	; 200
+ 100:	91 09       	sbc	r25, r1
+ 102:	84 36       	cpi	r24, 0x64	; 100
+ 104:	91 05       	cpc	r25, r1
+ 106:	28 f4       	brcc	.+10     	; 0x112 <main+0x7a>
+			{
+				dutyCycleTime+=3;
+ 108:	0d 5f       	subi	r16, 0xFD	; 253
+ 10a:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+ 10c:	c0 e0       	ldi	r28, 0x00	; 0
+ 10e:	d0 e0       	ldi	r29, 0x00	; 0
+ 110:	ce cf       	rjmp	.-100    	; 0xae <main+0x16>
+			}
+			else if(dutyCycleTime >= 200 && dutyCycleTime < 300)
+			{
+				dutyCycleTime+=3;
+			}
+			else if(dutyCycleTime >= 300 && dutyCycleTime < 400)
+ 112:	c8 01       	movw	r24, r16
+ 114:	8c 52       	subi	r24, 0x2C	; 44
+ 116:	91 40       	sbci	r25, 0x01	; 1
+ 118:	84 36       	cpi	r24, 0x64	; 100
+ 11a:	91 05       	cpc	r25, r1
+ 11c:	28 f4       	brcc	.+10     	; 0x128 <main+0x90>
+			{
+				dutyCycleTime+=4;
+ 11e:	0c 5f       	subi	r16, 0xFC	; 252
+ 120:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+ 122:	c0 e0       	ldi	r28, 0x00	; 0
+ 124:	d0 e0       	ldi	r29, 0x00	; 0
+ 126:	c3 cf       	rjmp	.-122    	; 0xae <main+0x16>
+			}
+			else if(dutyCycleTime >= 300 && dutyCycleTime < 400)
+			{
+				dutyCycleTime+=4;
+			}
+			else if(dutyCycleTime >= 400 && dutyCycleTime < 500)
+ 128:	c8 01       	movw	r24, r16
+ 12a:	80 59       	subi	r24, 0x90	; 144
+ 12c:	91 40       	sbci	r25, 0x01	; 1
+ 12e:	84 36       	cpi	r24, 0x64	; 100
+ 130:	91 05       	cpc	r25, r1
+ 132:	28 f4       	brcc	.+10     	; 0x13e <main+0xa6>
+			{
+				dutyCycleTime+=5;
+ 134:	0b 5f       	subi	r16, 0xFB	; 251
+ 136:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+ 138:	c0 e0       	ldi	r28, 0x00	; 0
+ 13a:	d0 e0       	ldi	r29, 0x00	; 0
+ 13c:	b8 cf       	rjmp	.-144    	; 0xae <main+0x16>
+			}
+			else if(dutyCycleTime >= 400 && dutyCycleTime < 500)
+			{
+				dutyCycleTime+=5;
+			}
+			else if(dutyCycleTime >= 500 && dutyCycleTime < 600)
+ 13e:	c8 01       	movw	r24, r16
+ 140:	84 5f       	subi	r24, 0xF4	; 244
+ 142:	91 40       	sbci	r25, 0x01	; 1
+ 144:	84 36       	cpi	r24, 0x64	; 100
+ 146:	91 05       	cpc	r25, r1
+ 148:	28 f4       	brcc	.+10     	; 0x154 <main+0xbc>
+			{
+				dutyCycleTime+=6;
+ 14a:	0a 5f       	subi	r16, 0xFA	; 250
+ 14c:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+ 14e:	c0 e0       	ldi	r28, 0x00	; 0
+ 150:	d0 e0       	ldi	r29, 0x00	; 0
+ 152:	ad cf       	rjmp	.-166    	; 0xae <main+0x16>
+			}
+			else if(dutyCycleTime >= 500 && dutyCycleTime < 600)
+			{
+				dutyCycleTime+=6;
+			}
+			else if(dutyCycleTime >= 600 && dutyCycleTime < 700)
+ 154:	c8 01       	movw	r24, r16
+ 156:	88 55       	subi	r24, 0x58	; 88
+ 158:	92 40       	sbci	r25, 0x02	; 2
+ 15a:	84 36       	cpi	r24, 0x64	; 100
+ 15c:	91 05       	cpc	r25, r1
+ 15e:	28 f4       	brcc	.+10     	; 0x16a <main+0xd2>
+			{
+				dutyCycleTime+=7;
+ 160:	09 5f       	subi	r16, 0xF9	; 249
+ 162:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+ 164:	c0 e0       	ldi	r28, 0x00	; 0
+ 166:	d0 e0       	ldi	r29, 0x00	; 0
+ 168:	a2 cf       	rjmp	.-188    	; 0xae <main+0x16>
+			}
+			else if(dutyCycleTime >= 600 && dutyCycleTime < 700)
+			{
+				dutyCycleTime+=7;
+			}
+			else if(dutyCycleTime >= 800 && dutyCycleTime < 900)
+ 16a:	c8 01       	movw	r24, r16
+ 16c:	80 52       	subi	r24, 0x20	; 32
+ 16e:	93 40       	sbci	r25, 0x03	; 3
+ 170:	84 36       	cpi	r24, 0x64	; 100
+ 172:	91 05       	cpc	r25, r1
+ 174:	28 f4       	brcc	.+10     	; 0x180 <main+0xe8>
+			{
+				dutyCycleTime+=8;
+ 176:	08 5f       	subi	r16, 0xF8	; 248
+ 178:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+ 17a:	c0 e0       	ldi	r28, 0x00	; 0
+ 17c:	d0 e0       	ldi	r29, 0x00	; 0
+ 17e:	97 cf       	rjmp	.-210    	; 0xae <main+0x16>
+			}
+			else if(dutyCycleTime >= 800 && dutyCycleTime < 900)
+			{
+				dutyCycleTime+=8;
+			}
+			else if(dutyCycleTime >= 900 && dutyCycleTime <= 991)
+ 180:	24 58       	subi	r18, 0x84	; 132
+ 182:	33 40       	sbci	r19, 0x03	; 3
+ 184:	2c 35       	cpi	r18, 0x5C	; 92
+ 186:	31 05       	cpc	r19, r1
+ 188:	08 f0       	brcs	.+2      	; 0x18c <main+0xf4>
+ 18a:	8d cf       	rjmp	.-230    	; 0xa6 <main+0xe>
+			{
+				dutyCycleTime+=9;
+ 18c:	07 5f       	subi	r16, 0xF7	; 247
+ 18e:	1f 4f       	sbci	r17, 0xFF	; 255
+			}
+			else
+			{
+				dutyCycleTime = 0;
+			}
+			i = 0;
+ 190:	c0 e0       	ldi	r28, 0x00	; 0
+ 192:	d0 e0       	ldi	r29, 0x00	; 0
+ 194:	8c cf       	rjmp	.-232    	; 0xae <main+0x16>
+
+00000196 <_exit>:
+ 196:	f8 94       	cli
+
+00000198 <__stop_program>:
+ 198:	ff cf       	rjmp	.-2      	; 0x198 <__stop_program>
